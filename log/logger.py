@@ -1,13 +1,20 @@
 import os
 import logging
 
-path = os.path.dirname(os.path.realpath(__file__))
 # Create a custom logger
 logger = logging.getLogger("jokerbot")
 
 # Create handlers
 c_handler = logging.StreamHandler()
-f_handler = logging.FileHandler(path + '/logs/jokerbot.log')
+
+path = os.path.dirname(os.path.realpath(__file__)) + '/logs'
+try:
+    os.mkdir(path)
+except OSError:
+    print ("Creation of the directory %s failed" % path)
+
+f_handler = logging.FileHandler(path + '/jokerbot.log')
+
 c_handler.setLevel(logging.DEBUG)
 f_handler.setLevel(logging.ERROR)
 
