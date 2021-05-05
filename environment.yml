@@ -1,10 +1,13 @@
 name: discord
 channels:
+  - conda-forge
   - defaults
 dependencies:
+  - python=3.9
   - pillow
   - numpy
   - conda-env
+  - pip
   - pip:
     - discord.py
     - python-dotenv
