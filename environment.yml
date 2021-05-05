@@ -6,6 +6,8 @@ dependencies:
   - python=3.9
   - pillow
   - numpy
+  - scipy
+  - matplotlib
   - conda-env
   - pip
   - pip:
