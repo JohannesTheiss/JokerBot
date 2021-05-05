@@ -58,4 +58,3 @@ dependencies:
   - zstd=1.4.9=haebb681_0
   - pip:
     - qrcode==6.1
-prefix: /home/johannes/anaconda3/envs/discord
