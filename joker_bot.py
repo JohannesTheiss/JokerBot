@@ -5,11 +5,14 @@ import subprocess
 import numpy as np
 import json
 
+from log.logger import *
+
 
 # load .env
 from dotenv import load_dotenv
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
+
 
 
 client = discord.Client()
