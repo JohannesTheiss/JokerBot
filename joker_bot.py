@@ -8,6 +8,7 @@ import json
 from log.logger import *
 
 
+
 # load .env
 from dotenv import load_dotenv
 load_dotenv()
@@ -65,21 +66,12 @@ async def on_message(message):
         await message.channel.send(text.hex())
 
     elif message.content.startswith('$cputemp'):
-        # das geht nur unter LINUS mit dem cputemp script
+        # das geht nur unter LINUX mit dem cputemp script
         temp = subprocess.check_output(['zsh', '-c', '. pc.sh; cputemp'])
         s = ' '.join(str(temp.decode("utf-8")).split())
         res = "Ich bin **{}** heiß! :hot_pepper::fire:".format(s)
         print("{}: cputemp: {}".format(str(message.author), s))
         await message.channel.send(res)
-
-    # geht nicht  {
-    elif message.content.startswith('$join'):
-        channel = message.author.voice.channel
-        await channel.connect()
-
-    elif message.content.startswith('$leave'):
-        await ctx.voice_client.disconnect()
-    # }
 
     elif message.content.startswith('$help'):
         lgs = """{
@@ -101,8 +93,8 @@ async def on_message(message):
             a = np.array(lgs_dict['M'])
             b = np.array(lgs_dict['V'])
             x = np.linalg.solve(a, b)
-            x = np.array([round(v, 5) for v in x])
-            x_string = np.array2string(x)
+            #x = np.array([round(v, 5) for v in x])
+            x_string = np.array2string(x, separator=', ', formatter={'float_kind':lambda x: "%.2f" % x})
 
 
             # log
