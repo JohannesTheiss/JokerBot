@@ -7,4 +7,3 @@ dependencies:
   - numpy
   - python-dotenv
   - conda-env
-prefix: /home/johannes/anaconda3/envs/discord
