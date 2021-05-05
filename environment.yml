@@ -2,8 +2,9 @@ name: discord
 channels:
   - defaults
 dependencies:
-  - discord.py
   - pillow
   - numpy
-  - python-dotenv
   - conda-env
+  - pip:
+    - discord.py
+    - python-dotenv
