@@ -4,8 +4,10 @@ import os
 import subprocess
 import numpy as np
 import json
+import random
 
 from log.logger import *
+import integrate
 
 
 
@@ -28,6 +30,9 @@ async def on_ready():
                                     name="187",
                                     url="https://www.youtube.com/watch?v=CzlOERhLEFw",
                                     details="lol ok"))
+    #user = await client.fetch_user("Dan!el#7786")
+    #user = await client.fetch_user("7950")
+    #await user.send("Hello there!")
 
 @client.event
 async def on_message(message):
@@ -67,11 +72,12 @@ async def on_message(message):
 
     elif message.content.startswith('$cputemp'):
         # das geht nur unter LINUX mit dem cputemp script
-        temp = subprocess.check_output(['zsh', '-c', '. pc.sh; cputemp'])
-        s = ' '.join(str(temp.decode("utf-8")).split())
-        res = "Ich bin **{}** heiß! :hot_pepper::fire:".format(s)
-        print("{}: cputemp: {}".format(str(message.author), s))
-        await message.channel.send(res)
+        #temp = subprocess.check_output(['zsh', '-c', '. pc.sh; cputemp'])
+        #s = ' '.join(str(temp.decode("utf-8")).split())
+        #res = "Ich bin **{}** heiß! :hot_pepper::fire:".format(s)
+        #print("{}: cputemp: {}".format(str(message.author), s))
+        #await message.channel.send(res)
+        await message.channel.send("NEIN")
 
     elif message.content.startswith('$help'):
         lgs = """{
@@ -117,9 +123,58 @@ async def on_message(message):
             await message.author.send("So läuft das hier nicht... Ich bauch ein LGS :wink:. (https://de.wikipedia.org/wiki/Lineares_Gleichungssystem)")
 
 
+    elif message.content.startswith('$uptime'):
+        temp = subprocess.check_output(['zsh', '-c', 'uptime -p'])
+        s = ' '.join(str(temp.decode("utf-8")).split())
+        print("{}: uptime: {} ".format(str(message.author), s))
+        await message.channel.send(s)
+
+    elif message.content.startswith('$integrate '):
+        #try:
+            expression = message.content.split(' ', 1)[1]
+            print(expression)
+
+            ex = integrate.integrateExp(expression)
+            if ex == -1:
+                print("ERROR by ", message.author)
+                raise ValueError('A very specific bad thing happened.')
+
+            # log
+            print("{}: integrate: {} ---> {}".format(str(message.author), expression, ex))
+
+            img = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.vFEwepavp54qQBpnsDR3nwHaFy%26pid%3DApi&f=1"
+
+            # print embed
+            embedlist = discord.Embed(title='Integration', colour=discord.Colour(0x3e038c),
+                                      description="∫ {}".format(expression))
+            embedlist.set_thumbnail(url=img)
+            embedlist.set_footer(text="Powered by Power")
+
+            for s in ex:
+                embedlist.add_field(name=s[0], value=s[1].replace("**", "^"), inline=False)
+
+            await message.channel.send(embed=embedlist)
+
+        #except:
+            #print("ERROR: {}: {} ".format(str(message.author), message.content))
+            #await message.author.send("So läuft das hier nicht...")
+
     elif 'jokerbot' in message.content.lower():
         print("{}: hat jokerbot gesagt".format(str(message.author)))
         await message.channel.send('Ja ja... du mich auch! :sunglasses:')
+
+    elif "damn boi" == message.content.lower():
+        r = round(random.uniform(0, 2))
+        print("random i guess ", r)
+        l = "YOU"
+        if r == 0:
+            l = "SHE"
+        elif r == 1:
+            l = "HE"
+
+        await message.channel.send('{} THICC'.format(l))
+
+
 
 
 
