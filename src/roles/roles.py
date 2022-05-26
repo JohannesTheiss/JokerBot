@@ -1,9 +1,14 @@
 import discord
 from discord.ext import commands
 
+from src.log.logger import Logger
+
 class Roles(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+
+        # create roles logger
+        self.logger = Logger(__name__).get()
 
     # @commands.Cog.listener()
     # async def on_member_join(self, member):
