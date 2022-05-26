@@ -56,6 +56,8 @@ class Roles(commands.Cog):
         else:
             self.roleLinks[guild_id] = [roleLink]
 
+        await ctx.send(f'Added Role-Link-Connection for: {role.mention}')
+
     @commands.command()
     async def getRoleLinks(self, ctx):
         self.logger.info(f'{ctx.guild.name}::{str(ctx.author)} get role links')
