@@ -12,8 +12,9 @@ class JokerBot(commands.Bot):
     def __init__(self):
         super().__init__(command_prefix=self.PREFIX,
                          intents=discord.Intents.all(),
-                         help_command=None)
-        self.load_plugins(self.PLUGINS)
+                         help_command=None,
+                         case_insensitive=True)
+        #self.load_plugins(self.PLUGINS)
 
         # create joker_bot logger
         self.logger = Logger(__name__).get()
@@ -25,6 +26,8 @@ class JokerBot(commands.Bot):
 
     async def on_ready(self):
         self.logger.info('Logged in as {0.user}'.format(self))
+
+        self.load_plugins(self.PLUGINS)
 
         # Setting `Listening ` status
         await self.change_presence(\
