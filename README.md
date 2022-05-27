@@ -23,6 +23,10 @@ $ docker attach --sig-proxy=false joker_bot
 ```
 docker container stop joker_bot
 ```
+##### Start the installed docker container
+```
+$ docker run -v $PWD/logs:/app/logs -v $PWD/json:/app/json --detach --rm --name=joker_bot joker_bot
+```
 
 ## Development
 #### Clone the repository (for development)

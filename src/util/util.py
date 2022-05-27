@@ -27,12 +27,13 @@ class Util(commands.Cog):
         self.logger.info("{}: hex: {} -> {}".format(str(ctx.author), text, text_hex))
         await ctx.send(text_hex)
 
-    @commands.command()
-    async def uptime(self, ctx):
-        temp = subprocess.check_output(['zsh', '-c', 'uptime -p'])
-        s = ' '.join(str(temp.decode("utf-8")).split())
-        self.logger.info("{}: uptime: {} ".format(str(ctx.author), s))
-        await ctx.send(s)
+    # use https://pypi.org/project/psutil/
+    #@commands.command()
+    #async def uptime(self, ctx):
+     #   temp = subprocess.check_output(['sh', '-c', 'uptime -p'])
+      #  s = ' '.join(str(temp.decode("utf-8")).split())
+       # self.logger.info("{}: uptime: {} ".format(str(ctx.author), s))
+      #  await ctx.send(s)
 
 
 # is mandatory for a plugins 
