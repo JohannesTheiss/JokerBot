@@ -10,15 +10,18 @@ DISCORD_TOKEN=YOUR_TOKEN
 ```
 $ git clone --depth 1 https://github.com/JohannesTheiss/JokerBot 
 ```
-
-#### Start the docker container
+#### Start the docker daemon and container
 ```
 $ sudo systemctl start docker
 $ ./build-docker.sh
 ```
 ##### Attach to the live logs of the container
 ```
-$ docker attach joker_bot
+$ docker attach --sig-proxy=false joker_bot
+```
+##### Stop the running docker container
+```
+docker container stop joker_bot
 ```
 
 ## Development
