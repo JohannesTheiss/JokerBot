@@ -16,10 +16,7 @@ WORKDIR /app
 COPY . .
 
 # Install requirements
-#RUN pip3 install setuptools
 RUN pip3 install -r requirements.txt
-RUN pip3 install importlib
-
 
 # Start the bot
-CMD [ "python3", "run.py"]
+CMD [ "python", "run.py" ]

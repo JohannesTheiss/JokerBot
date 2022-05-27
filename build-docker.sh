@@ -11,4 +11,5 @@ docker build --tag="${CONTAINER_NAME}" .
 # Run a command in a new container
 # --name string : Assign a name to the container
 # --rm          : Automatically remove the container when it exits
-docker run --rm --name="${CONTAINER_NAME}" "${CONTAINER_NAME}"
+# --detach      : Run container in background and print container ID
+docker run --detach --rm --name="${CONTAINER_NAME}" "${CONTAINER_NAME}"

@@ -6,7 +6,7 @@ from src.log.logger import Logger
 class JokerBot(commands.Bot):
 
     # plugins
-    PLUGINS = ['util.help', 'util.util', 'roles.roles', 'error.commandErrorHandler']
+    PLUGINS = ['src.util.help', 'src.util.util', 'src.roles.roles', 'src.error.commandErrorHandler']
     PREFIX = '!'
 
     def __init__(self):

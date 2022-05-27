@@ -4,7 +4,7 @@ import logging
 
 
 class Logger:
-    LOG_DIR    = "logs"
+
     LOG_FORMAT = logging.Formatter('[%(asctime)s] - %(name)-25s - %(levelname)-8s - %(message)s')
 
     def __init__(self, logger_name):
@@ -17,7 +17,7 @@ class Logger:
         self.logger.setLevel(logging.DEBUG)
 
         # create the logs directory
-        self.pathToLogs = self.createDir()
+        self.pathToLogs = os.path.dirname(os.path.realpath(__file__)) + '/../../logs'
 
         # add the handler
         self.addConsoleHandler()
@@ -26,15 +26,6 @@ class Logger:
 
     def get(self):
         return self.logger
-
-    def createDir(self):
-        path = os.path.dirname(os.path.realpath(__file__)) + '/../../' + self.LOG_DIR
-        try:
-            if not os.path.isdir(path):
-                os.mkdir(path)
-        except OSError:
-            print ("Creation of the directory %s failed" % path)
-        return path
 
     def addConsoleHandler(self):
         console_handler = logging.StreamHandler(sys.stdout)
