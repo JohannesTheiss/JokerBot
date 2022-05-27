@@ -1,0 +1,5 @@
+discord.py==1.7.3
+numpy==1.22.3
+python-dotenv==0.20.0
+qrcode==7.3.1
+sympy==1.10.1
