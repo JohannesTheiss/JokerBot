@@ -15,7 +15,7 @@ docker build --tag="${CONTAINER_NAME}" .
 # --rm          : Automatically remove the container when it exits
 # --detach      : Run container in background and print container ID
 # -v            : Bind mount a volume
-docker run -v $PWD/logs:/app/logs -v $PWD/json:/app/json --detach --rm -name="${CONTAINER_NAME}" "${CONTAINER_NAME}"
+docker run -v $PWD/logs:/app/logs -v $PWD/json:/app/json --detach --rm --name="${CONTAINER_NAME}" "${CONTAINER_NAME}"
 
 # Attach local standard input, output, and error streams to a running container
 # --sig-proxy   : Proxy all received signals to the process (default true)
