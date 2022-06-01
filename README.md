@@ -10,6 +10,12 @@ DISCORD_TOKEN=YOUR_TOKEN
 ```
 git clone --depth 1 https://github.com/JohannesTheiss/JokerBot 
 ```
+### native Python
+```
+pip install -r requirements.txt
+python run.py
+```
+### Docker
 #### Start the docker daemon and container
 ```
 sudo systemctl start docker
