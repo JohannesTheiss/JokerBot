@@ -1,10 +1,10 @@
 FROM python:3.10-alpine
 
 # Install packages
-RUN apk add --update --no-cache musl-dev linux-headers g++
+RUN apk add --update --no-cache musl-dev linux-headers g++ build-base py-pip jpeg-dev zlib-dev
 
 # Upgrade pip
-RUN python -m pip install --upgrade pip
+RUN python3 -m pip install --upgrade pip
 
 # Setup app
 RUN mkdir -p /app
