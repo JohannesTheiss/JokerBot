@@ -66,7 +66,7 @@ class Voice(commands.Cog):
         text = 'Tschüsseldorf'
         await ctx.voice_client.disconnect()
 
-    @commands.command()
+    @commands.command(help="ruf den loser", aliases=["loser"])
     async def daniel(self, ctx):
         user = ctx.author
         self.logger.info(f'daniel : {user}')
