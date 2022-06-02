@@ -6,6 +6,8 @@ import subprocess
 from gtts import gTTS
 import random
 
+from io import BytesIO, TextIOWrapper
+
 from src.log.logger import Logger
 
 class Util(commands.Cog):
@@ -37,56 +39,57 @@ class Util(commands.Cog):
        # self.logger.info("{}: uptime: {} ".format(str(ctx.author), s))
       #  await ctx.send(s)
 
+    # def is_connected(self, ctx):
+        # voice_client = discord.utils.get(ctx.bot.voice_clients, guild=ctx.guild)
+        # return voice_client and voice_client.is_connected()
 
-    @commands.command()
-    async def join(self, ctx):
-        channel = ctx.author.voice.channel
-        await channel.connect()
-
-    @commands.command()
-    async def daniel(self, ctx):
+    async def connect_to_voice_channel(self, ctx):
         user = ctx.author
-        voice_channel = user.voice.channel
 
-        if voice_channel != None:
-            voice_client = await self.connect_to_channel(ctx, voice_channel)
+        # if user is connect to a voice channel
+        # TODO catch if command on DM
+        if user.voice and (user.voice.channel != None):
+            voice_channel = user.voice.channel
+            voice_client = discord.utils.get(ctx.bot.voice_clients, guild=ctx.guild)
+
+            # if the bot is not connected to the voice channel of the user
+            if not (voice_client and voice_client.is_connected()):
+                voice_client = await voice_channel.connect()
+
+            return voice_client
+
+        else:
+            # TODO throw error
+            # if user is not connect to a voice channel
+            self.logger.warning(f'say : User {user} is not connect to a voice channel')
+            await user.send('Du musst in einem Voice-Channel sein')
+            return None
+
+    def play_audio_file(self, voice_client, pathToAudioFile):
+        if (voice_client != None) and voice_client.is_connected():
             voice_client.loop = False
-            voice_client.play(discord.FFmpegPCMAudio('Daniel.flac'))
+            voice_client.play(discord.FFmpegPCMAudio(pathToAudioFile))
 
-    def is_connected(self, ctx):
-        voice_client = discord.utils.get(ctx.bot.voice_clients, guild=ctx.guild)
-        return voice_client and voice_client.is_connected()
+    def text_to_mp3(self, text, outputFilename):
+        tts = gTTS(text=text,
+                     lang='de',
+                     tld='ch',
+                     slow=False)
+        tts.save(outputFilename)
 
-    async def connect_to_channel(self, ctx, voice_channel):
-        voice_client = discord.utils.get(ctx.bot.voice_clients, guild=ctx.guild)
-        if not (voice_client and voice_client.is_connected()):
-            voice_client = await voice_channel.connect()
-        return voice_client
+    async def read_text(self, ctx, text):
+        voice_client = await self.connect_to_voice_channel(ctx)
+        if voice_client != None: # TODO if there is a error then we dont need this if
+            audio_filename = 'tts.mp3'
+            self.text_to_mp3(text, audio_filename)
+            self.play_audio_file(voice_client, audio_filename)
 
-    @commands.command()
-    async def say(self, ctx, *, text):
-        user = ctx.author
-        voice_channel = user.voice.channel
+    def find_channel_by_name(self, ctx, channel_name):
+        for channel in ctx.guild.text_channels:
+            if channel.name == channel_name:
+                return channel
+        return None
 
-        if voice_channel != None:
-
-            myobj = gTTS(text=text, lang='de', tld='ch', slow=False)
-            myobj.save("welcome.mp3")
-
-            voice_client = await self.connect_to_channel(ctx, voice_channel)
-            voice_client.loop = False
-            voice_client.play(discord.FFmpegPCMAudio('welcome.mp3'))
-
-    async def sag(self, ctx, text):
-        user = ctx.author
-        voice_channel = user.voice.channel
-        if voice_channel != None:
-            myobj = gTTS(text=text, lang='de', tld='ch', slow=False)
-            myobj.save("welcome.mp3")
-
-            voice_client = await self.connect_to_channel(ctx, voice_channel)
-            voice_client.loop = False
-            voice_client.play(discord.FFmpegPCMAudio('welcome.mp3'))
 
     @commands.command()
     async def leave(self, ctx):
@@ -94,34 +97,38 @@ class Util(commands.Cog):
         await ctx.voice_client.disconnect()
 
     @commands.command()
+    async def daniel(self, ctx):
+        user = ctx.author
+        self.logger.info(f'daniel : {user}')
+        voice_client = await self.connect_to_voice_channel(ctx)
+
+        if voice_client != None: # TODO if there is a error then we dont need this if
+            self.play_audio_file(voice_client, 'Daniel.flac')
+
+
+    @commands.command()
+    async def say(self, ctx, *, text):
+        user = ctx.author
+        self.logger.info(f'say : {user} -> {text}')
+        await self.read_text(ctx, text)
+
+    @commands.command()
     async def read(self, ctx, channel_name):
-        channels = ctx.guild.text_channels
+        user = ctx.author
+        self.logger.info(f'read : {user} -> {channel_name}')
 
-        channel = None
-        for c in channels:
-            if c.name == channel_name:
-                channel = c
-
+        # find channel by name
+        channel = self.find_channel_by_name(ctx, channel_name)
+        if channel == None:
+            # TODO add execption
+            return
 
         messages = await channel.history(limit=1000).flatten()
-
-        #for msg in messages:
-            #print(msg.content)
-
-        pos = random.randint(0, len(messages))
-        print(len(messages))
-
+        pos = random.randint(0, len(messages)-1)
         text = messages[pos].content
 
-        user = ctx.author
-        voice_channel = user.voice.channel
-        if voice_channel != None:
-            myobj = gTTS(text=text, lang='de', tld='ch', slow=False)
-            myobj.save("welcome.mp3")
-
-            voice_client = await self.connect_to_channel(ctx, voice_channel)
-            voice_client.loop = False
-            voice_client.play(discord.FFmpegPCMAudio('welcome.mp3'))
+        #await ctx.invoke(self.bot.get_command('say'), text=text)
+        await self.read_text(ctx, text)
 
         await ctx.send(f'> {text}')
 

@@ -15,6 +15,19 @@ git clone --depth 1 https://github.com/JohannesTheiss/JokerBot
 pip install -r requirements.txt
 python run.py
 ```
+install as service
+```
+sudo cp joker_bot.service /lib/systemd/system/
+sudo chmod 644 /lib/systemd/system/joker_bot.service
+chmod +x run.py
+sudo systemctl daemon-reload
+sudo systemctl start joker_bot.service
+```
+watch logs of the server
+```
+sudo journalctl -f -u joker_bot.service
+```
+
 ### Docker
 #### Start the docker daemon and container
 ```

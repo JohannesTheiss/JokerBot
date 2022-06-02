@@ -1,0 +1,14 @@
+[Unit]
+Description=Discord Bot
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User=pyke
+WorkingDirectory=/home/pyke/apps/JokerBot
+ExecStart=/usr/bin/python /home/pyke/apps/JokerBot/run.py
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target
