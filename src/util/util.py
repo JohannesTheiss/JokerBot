@@ -4,6 +4,10 @@ from discord.ext import commands
 import qrcode
 import subprocess
 
+import time
+import datetime
+#import psutil
+
 from src.log.logger import Logger
 
 class Util(commands.Cog):
@@ -12,6 +16,9 @@ class Util(commands.Cog):
 
         # create util logger
         self.logger = Logger(__name__).get()
+
+        # start uptime timer
+        self.start_time = time.time()
 
     @commands.command()
     async def qrcode(self, ctx, text):
@@ -27,13 +34,14 @@ class Util(commands.Cog):
         self.logger.info("{}: hex: {} -> {}".format(str(ctx.author), text, text_hex))
         await ctx.send(text_hex)
 
-    # use https://pypi.org/project/psutil/
-    #@commands.command()
-    #async def uptime(self, ctx):
-     #   temp = subprocess.check_output(['sh', '-c', 'uptime -p'])
-      #  s = ' '.join(str(temp.decode("utf-8")).split())
-       # self.logger.info("{}: uptime: {} ".format(str(ctx.author), s))
-      #  await ctx.send(s)
+    @commands.command()
+    async def uptime(self, ctx):
+        time_delta = datetime.timedelta(seconds=int(round(time.time()-self.start_time)))
+        seconds = time_delta.seconds
+        uptime_str = f'```Days:     {time_delta.days}\nHours:    {seconds // 3600}\nMinutes:  {seconds // 60}\nSeconds:  {seconds}```'
+
+        self.logger.info(f'uptime : {ctx.author} -> {repr(uptime_str)}')
+        await ctx.send(uptime_str)
 
 # is mandatory for a plugins 
 def setup(bot):
