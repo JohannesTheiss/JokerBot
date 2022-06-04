@@ -6,7 +6,6 @@ import subprocess
 
 import time
 import datetime
-#import psutil
 
 from src.log.logger import Logger
 
@@ -21,7 +20,7 @@ class Util(commands.Cog):
         self.start_time = time.time()
 
     @commands.command()
-    async def qrcode(self, ctx, text):
+    async def qrcode(self, ctx, *, text):
         img = qrcode.make(text)
         savedImg = img.save("geeks.jpg")
         self.logger.info("{}: qrcode: {}".format(str(ctx.author), text))
