@@ -4,8 +4,7 @@ from discord.ext import commands
 import qrcode
 import subprocess
 
-import time
-import datetime
+from datetime import datetime
 
 from src.log.logger import Logger
 
@@ -17,7 +16,13 @@ class Util(commands.Cog):
         self.logger = Logger(__name__).get()
 
         # start uptime timer
-        self.start_time = time.time()
+        self.start_time = datetime.now()
+
+    def format_time_delta(self, time_delta, fmt):
+        d = {"days": time_delta.days}
+        d["hours"], rem = divmod(time_delta.seconds, 3600)
+        d["minutes"], d["seconds"] = divmod(rem, 60)
+        return fmt.format(**d)
 
     @commands.command()
     async def qrcode(self, ctx, *, text):
@@ -35,9 +40,9 @@ class Util(commands.Cog):
 
     @commands.command()
     async def uptime(self, ctx):
-        time_delta = datetime.timedelta(seconds=int(round(time.time()-self.start_time)))
-        seconds = time_delta.seconds
-        uptime_str = f'```Days:     {time_delta.days}\nHours:    {seconds // 3600}\nMinutes:  {seconds // 60}\nSeconds:  {seconds}```'
+        time_delta = datetime.now() - self.start_time
+        time_delta_format = '```Days:     {days}\nHours:    {hours}\nMinutes:  {minutes}\nSeconds:  {seconds}```'
+        uptime_str = self.format_time_delta(time_delta, time_delta_format)
 
         self.logger.info(f'uptime : {ctx.author} -> {repr(uptime_str)}')
         await ctx.send(uptime_str)
