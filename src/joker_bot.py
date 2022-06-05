@@ -45,7 +45,8 @@ class JokerBot(commands.Bot):
         # Setting Streaming status
         await self.change_presence(
                 activity=discord.Streaming(
-                    name='Ejakulat101',
+                    #name='Ejakulat101',
+                    name='!help',
                     url='https://www.youtube.com/watch?v=dQw4w9WgXcQ'),
                 )
 

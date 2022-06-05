@@ -16,9 +16,8 @@ class Math(commands.Cog):
         # create util logger
         self.logger = Logger(__name__).get()
 
-    @commands.command()
-    async def lgsHelp(self, ctx):
-        lgs = """{
+    @commands.command(aliases=['solveLgs'],
+                      help="""Solve a given LGS.\ne.g.\n```!lgs {
     "M": [
             [2, 3,-1, 0, 0],
             [1, 3, 0,-1, 0],
@@ -27,10 +26,7 @@ class Math(commands.Cog):
             [0, 0, 1, 2, 3]
          ],
     "V": [1, 0, 0, 1, 1]
-}"""
-        await ctx.send(lgs)
-
-    @commands.command()
+}```""")
     async def lgs(self, ctx, *, lgs):
         try:
             lgs_dict = json.loads(lgs)
@@ -57,7 +53,8 @@ class Math(commands.Cog):
             self.logger.warning("{}: lgs: {} ".format(str(ctx.author), ctx.content))
             await ctx.author.send("So läuft das hier nicht... Ich bauch ein LGS :wink:. (https://de.wikipedia.org/wiki/Lineares_Gleichungssystem)")
 
-    @commands.command()
+    @commands.command(aliases=['integ'],
+                      help='Integrate a given expression.\ne.g.\n`!integrate (3/2)-x`')
     async def integrate(self, ctx, *, expression):
         ex = self.integration.integrateExp(expression)
         if ex == -1:

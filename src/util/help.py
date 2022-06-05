@@ -17,15 +17,11 @@ class Help(commands.HelpCommand):
     def get_command_signature(self, command):
         return f'{self.clean_prefix}{command.qualified_name} {command.signature}'
 
+    # on !help 
     async def send_bot_help(self, mapping):
-        #filtered = await self.filter_commands(self.context.bot.commands, sort=True) # returns a list of command objects
-        #names = [command.name for command in filtered] # iterating through the commands objects getting names
-        #available_commands = "\n".join(names) # joining the list of names by a new line
-        #embed  = discord.Embed(description=available_commands, color=0x56358e)
-        #await self.context.send(embed=
-        #self.logger.info(f'help : {self.context.author}')
+        self.logger.info(f'help : {self.context.author}')
 
-        embed = discord.Embed(title="Help")
+        embed = discord.Embed(title="Help", color=0x56358e)
         for cog, commands in mapping.items():
            command_signatures = [self.get_command_signature(c) for c in commands]
            if command_signatures:
@@ -35,8 +31,10 @@ class Help(commands.HelpCommand):
         channel = self.get_destination()
         await channel.send(embed=embed)
 
+    # on !help <command>
     async def send_command_help(self, command):
-        """This is triggered when !help <command> is invoked."""
+        self.logger.info(f'help {command.name} : {self.context.author}')
+
         embed = discord.Embed(title=self.get_command_signature(command))
         embed.add_field(name="Help", value=command.help)
         alias = command.aliases
@@ -46,6 +44,7 @@ class Help(commands.HelpCommand):
         channel = self.get_destination()
         await channel.send(embed=embed)
 
+    # on !help 
     async def send_group_help(self, group):
         """This is triggered when !help <group> is invoked."""
         await self.context.send("This is the help page for a group command")
@@ -55,6 +54,8 @@ class Help(commands.HelpCommand):
         await self.context.send("This is the help page for a cog")
 
     async def on_help_command_error(self, ctx, error):
+        self.logger.info(f'help_command_error: {command.name} : {self.context.author}')
+
         if isinstance(error, commands.BadArgument):
             embed = discord.Embed(title="Error", description=str(error))
             await ctx.send(embed=embed)
@@ -63,6 +64,7 @@ class Help(commands.HelpCommand):
 
     async def send_error_message(self, error):
         """If there is an error, send a embed containing the error."""
+        self.logger.info(f'error_message: {error}')
         embed = discord.Embed(title="Error", description=error)
         channel = self.get_destination()
         await channel.send(embed=embed)

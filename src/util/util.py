@@ -24,21 +24,24 @@ class Util(commands.Cog):
         d["minutes"], d["seconds"] = divmod(rem, 60)
         return fmt.format(**d)
 
-    @commands.command()
+    @commands.command(aliases=['qrc', 'qr'],
+                      help='Create a QR-Code from the input text.\ne.g.\n`!qrcode Hello World`')
     async def qrcode(self, ctx, *, text):
         img = qrcode.make(text)
         savedImg = img.save("geeks.jpg")
         self.logger.info("{}: qrcode: {}".format(str(ctx.author), text))
         await ctx.send(file=discord.File('geeks.jpg'))
 
-    @commands.command()
-    async def hex(self, ctx, text):
+    @commands.command(aliases=['textToHex'],
+                      help='Convert the input text to Hex.\ne.g.\n`!hex Hello World`')
+    async def hex(self, ctx, *, text):
         text = text.encode('utf-8')
         text_hex = text.hex()
         self.logger.info("{}: hex: {} -> {}".format(str(ctx.author), text, text_hex))
         await ctx.send(text_hex)
 
-    @commands.command()
+    @commands.command(aliases=['upt'],
+                      help='Get the uptime of the bot.\ne.g.\n`!uptime`')
     async def uptime(self, ctx):
         time_delta = datetime.now() - self.start_time
         time_delta_format = '```Days:     {days}\nHours:    {hours}\nMinutes:  {minutes}\nSeconds:  {seconds}```'

@@ -61,12 +61,13 @@ class Voice(commands.Cog):
         return None
 
 
-    @commands.command()
+    @commands.command(help='Tell the bot to leave the voice channel.\ne.g.\n`!leave`')
     async def leave(self, ctx):
         text = 'Tschüsseldorf'
         await ctx.voice_client.disconnect()
 
-    @commands.command(help="ruf den loser", aliases=["loser"])
+    @commands.command(aliases=['loser', 'dan'],
+                      help='Ruft den LOSER.\ne.g.\n`!daniel`')
     async def daniel(self, ctx):
         user = ctx.author
         self.logger.info(f'daniel : {user}')
@@ -77,13 +78,15 @@ class Voice(commands.Cog):
             self.play_audio_file(voice_client, 'daniel2.m4a')
 
 
-    @commands.command()
+    @commands.command(aliases=['s', 'sag', 'saz'],
+                      help='The bot reads the input text.\ne.g.\n`!say Hallo lol`')
     async def say(self, ctx, *, text):
         user = ctx.author
         self.logger.info(f'say : {user} -> {text}')
         await self.read_text(ctx, text)
 
-    @commands.command()
+    @commands.command(aliases=['r'],
+                      help='The bot reads a random message from the given text channel.\ne.g.\n`!read general`')
     async def read(self, ctx, channel_name):
         user = ctx.author
         self.logger.info(f'read : {user} -> {channel_name}')

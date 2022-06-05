@@ -10,7 +10,12 @@ class Logger:
     def __init__(self, logger_name):
         self.logger_name = logger_name
 
-        # create a custom logger
+        # if logger already exists then just get it and return
+        if self.logger_name in logging.root.manager.loggerDict:
+            self.logger = logging.getLogger(self.logger_name)
+            return
+
+        # create or get a custom logger
         self.logger = logging.getLogger(self.logger_name)
 
         # set default logging level
