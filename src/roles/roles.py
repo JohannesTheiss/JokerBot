@@ -69,27 +69,16 @@ class Roles(commands.Cog):
         embed = discord.Embed(title=f"All active Role-Links",
                               color=0x4193ff,
                               url='https://www.youtube.com/watch?v=dQw4w9WgXcQ')
-        #embed.set_thumbnail(url='https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.KEQYFeX1x-PAOnZWAqTxxQHaE8%26pid%3DApi&f=1')
         embed.set_footer(text='Powered by *DEINER MOM*')
         for roleLink in self.roleLinks[guild_id]:
-            #embed.add_field(name=f'\u200b', value=f'{roleLink.get_role().mention} :arrow_right: {roleLink.get_link()}', inline=False)
             embed.add_field(name=f'@{roleLink.get_role().name}', value=f'{roleLink.get_link()}', inline=False)
 
         await ctx.send(embed=embed)
 
-        # lines = ['```']
-        # for roleLink in self.roleLinks[guild_id]:
-            # lines.append(f'{roleLink.get_role().mention} :arrow_right: {roleLink.get_link()}')
-        # lines.append('```')
-        # await ctx.send(content="\n".join(lines))
-
     @commands.command()
+    @commands.is_owner()
     async def saveRoleLinks(self, ctx):
         self.logger.info(f'{ctx.guild.name}::{str(ctx.author)} save role links to json')
-
-        if ctx.author.id == 317769221079695360:
-            self.saveRoleLinksToJson()
-
         await ctx.send("Saved")
 
     def saveRoleLinksToJson(self):

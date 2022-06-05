@@ -16,9 +16,11 @@ class CommandErrorHandler(commands.Cog):
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
         #The event triggered when an error is raised while invoking a command.
+        self.logger.warning(f'{str(error)}: {str(ctx.author)} -> {str(ctx.command)}')
         if isinstance(error, discord.ext.commands.CommandNotFound):
-            self.logger.warning(f'CommandError: {str(ctx.author)} -> {str(ctx.command)}')
             await ctx.send('WTF... Was willst du denn von mir???\n*LUL*')
+        elif isinstance(error, discord.ext.commands.NotOwner):
+            await ctx.send('Ja lol... Das darf nur der Bot-Owner')
         else:
             self.logger.error('Ignoring exception in command {}:'.format(ctx.command))
             traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
